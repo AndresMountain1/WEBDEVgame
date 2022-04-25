@@ -2,10 +2,12 @@ import http from 'http';
 import express from 'express';
 import dotenv from 'dotenv';
 
+// ROUTES 
+import testRoute from './routes/test';
+
 const router = express();
-
-
 dotenv.config();
+
 /** Log the request */
 router.use((req, res, next) => {
     /** Log the req */
@@ -41,7 +43,7 @@ router.use((req, res, next) => {
     next();
 });
 
-
+router.use('/test', testRoute);
 
 /** Error handling */
 router.use((req, res, next) => {
