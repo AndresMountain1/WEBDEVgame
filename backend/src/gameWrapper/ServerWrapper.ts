@@ -1,15 +1,24 @@
 import { ChildProcess, spawn } from "node:child_process";
 
 class ServerWrapper{
-    SERVER_PATH = "/home/artikex-reborn/Cours/Projet-PWEB/hackagames/game-risky/hg-risky";
+    // Path to the server executable
+    SERVER_PATH = "/home/artikex-reborn/Cours/Projet-PWEB/hackagames/game-risky/hg-risky-hidden";
     
-    server: ChildProcess;
+    server: ChildProcess | undefined;
 
-    constructor(){
-        this.server = spawn(this.SERVER_PATH, {stdio: ['ignore', 'pipe', 'pipe']});
+    gameNumber: number;
+
+    result: string;
+    constructor(gameNumber: number = 1){
+        this.gameNumber = gameNumber;
+        this.result = "";
+    }
+
+    launchServer(callback: any){
+        this.server = spawn(this.SERVER_PATH, [`${this.gameNumber}`], {stdio: ['ignore', 'pipe', 'pipe']});
         if(this.server.stdout){
             this.server.stdout.on('data', (data) => {
-                console.log(data.toString());
+                callback(data.toString());
 
             });
         }
@@ -28,14 +37,14 @@ class ServerWrapper{
         });
 
         this.server.on('exit', (code: any) => {
-            console.log(`child process exited with code ${code}`);
+            return true;
         }
         );
         this.server.on('spawn', () => {
-            console.log(`child process spawned`);
+            console.log(`child server process spawned`);
         });
-
     }
+    
 }
 
 export default ServerWrapper;
