@@ -1,9 +1,14 @@
 
 const mongoose = require('mongoose');
 
-const kittySchema = new mongoose.Schema({
-    name: String
-  });
+const usersSchema = new mongoose.Schema({
+  _id: mongoose.Types.ObjectId,
+  name: String,
+  password: Number
+});
 
-module.exports = mongoose.model('Kitten', kittySchema);
+module.exports = mongoose.model('User', usersSchema);
+
+
+
 
