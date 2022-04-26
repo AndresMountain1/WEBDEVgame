@@ -1,40 +1,42 @@
-import net from "net";
+import { ChildProcess, spawn } from "node:child_process";
+import { options } from "../routes/test";
 
 class ServerWrapper{
-    client: net.Socket;
+    SERVER_PATH = "/home/artikex-reborn/Cours/Projet-PWEB/hackagames/game-risky/hg-risky";
+    
+    server: ChildProcess;
 
     constructor(){
+        this.server = spawn(this.SERVER_PATH, {stdio: ['ignore', 'pipe', 'pipe']});
+        if(this.server.stdout){
+            this.server.stdout.on('data', (data) => {
+                console.log(data.toString());
 
-        this.client = new net.Socket();
+            });
+        }
 
-        this.client.connect(14001, '127.0.0.1', () => {
-            console.log('Connected');
-        });
-        
-        this.client.on('data', (data) => {
-            console.log(data.toString());
-        });
-        
-        this.client.on('close', function() {
-            console.log('Connection closed');
+        if(this.server.stderr){
+            this.server.stderr.on('data', (data) => {
+                console.log(data.toString());
+            });
+        }
+        this.server.on('close', (code: any) => {
+        console.log(`child process exited with code ${code}`);
         });
 
-        setTimeout(() => {
-            this.sendMove(1, 3, 10);
-        }, 5000);
+        this.server.on('error', (err: any) => {
+            console.error(`error: ${err}`);
+        });
+
+        this.server.on('exit', (code: any) => {
+            console.log(`child process exited with code ${code}`);
+        }
+        );
+        this.server.on('spawn', () => {
+            console.log(`child process spawned`);
+        });
 
     }
-
-    private send(data: string){
-        this.client.write(data);
-    }
-
-    public sendMove(fromNode: number, toNode: number, strength: number){
-        this.send(`move ${fromNode} ${toNode} ${strength}`);
-    }
-
 }
-
-let bap = new ServerWrapper();
 
 export default ServerWrapper;

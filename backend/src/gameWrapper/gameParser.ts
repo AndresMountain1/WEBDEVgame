@@ -5,6 +5,12 @@ function isGameWon(input :string) {
     return gameResult === 1 ? true : false;
 }
 
-let str = "score: [88.0, 126.0]\n action: move 2 0 0\n Final:  1\n";
-let res = isGameWon(str);
-console.log(res);
+// Gets the player id from the input string using a regex
+function getPlayerId(input :string) :number {
+    const regex = /Player: (\d) (\d)/g;
+    const match = regex.exec(input);
+    if(!match) throw new Error("No player id found");
+    return parseInt(match[1]);
+}
+
+export { isGameWon, getPlayerId };
