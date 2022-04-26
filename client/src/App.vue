@@ -1,12 +1,37 @@
 <script setup lang="ts">
-  import IaVsIa from './components/fights/IaVsIa.vue'
 </script>
 
 <template>
   <div>
     <header>
-      <IaVsIa />
+      <div class="page-header">
+        <div class="flex-row justify-content-center">
+          <div class="flex-row justify-content-space-between align-items-center general-width">
+              <div class="center">
+                <span class="title">
+                  HACKAGAME
+                </span>
+              </div>
+              <div class="flex-row">
+                <div class="middle m-h-lg">
+                  <router-link class="link" to="/IaVsIa">IA vs IA</router-link>
+                </div>
+                <div style="align-self: stretch; background-color: white; width : 1px">
+                </div>
+                <div class="middle m-h-lg">
+                  <router-link class="link" to="/IaVsHuman">HUMAN vs IA</router-link>
+                </div>
+              </div>
+              <div class="center">
+                <span class="title">
+                  Username
+                </span>
+              </div>
+          </div>
+        </div>
+      </div>
     </header>
+    <router-view></router-view>
   </div>
 </template>
 
