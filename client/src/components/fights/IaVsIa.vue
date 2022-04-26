@@ -12,7 +12,7 @@
     }, {
       id : 3, 
       path : "python/player3.py",
-      comment : "Miste IA"
+      comment : "Mixte IA"
     }, 
   ];
 
@@ -98,7 +98,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .parent {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
