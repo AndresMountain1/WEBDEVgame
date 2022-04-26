@@ -5,6 +5,18 @@ body {
     background-color: white;
 }
 
+.link {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+
 .page-header {
     width : 100%;
     height: 55px;
@@ -70,13 +82,14 @@ body {
     padding: 5px;
     font-family: 'Montserrat';
     margin: 10px;
+    cursor: pointer;
 }
   
 .main-button:hover{
-background-color: #102E49;
-padding: 10px;
-margin: 5px;
-transition: ease-in-out 0.1s;
+    background-color: #102E49;
+    padding: 10px;
+    margin: 5px;
+    transition: ease-in-out 0.1s;
 }
 
 .fight-label {
@@ -84,13 +97,13 @@ margin-bottom: 10px;
 }
 
 .player-selected {
-border : solid #102E49;
-color: red;
+    border : solid #102E49;
+    color: red;
 }
 
 .m-v {
-margin-top : 5px;
-margin-bottom : 5px;
+    margin-top : 5px;
+    margin-bottom : 5px;
 }
 
 .m-h {
@@ -107,4 +120,8 @@ background-color: green;
 }
 .loser {
 background-color: red;
+}
+
+.pointer {
+    cursor: pointer;
 }

@@ -43,11 +43,11 @@
         <div class="list-header">Liste des IAs</div>
         <div v-for="(Ia) in Ias" v-bind:key="Ia.id">
           <div @click="setIaLeftSelected(Ia)" class="m-v">
-            <div v-if="iaLeftSelected.id === Ia.id" class="player-selected">
+            <div v-if="iaLeftSelected.id === Ia.id" class="player-selected pointer">
               <span v-if="iaLeftSelected.id === Ia.id" style="color : red;">{{Ia.comment}}</span>
-              <span v-else>{{Ia.comment}}</span>
+              <span v-else class="pointer">{{Ia.comment}}</span>
             </div>
-            <div v-else>
+            <div v-else class="pointer">
               <span>{{Ia.comment}}</span>
             </div>
           </div>
@@ -84,11 +84,11 @@
         <div class="list-header">Liste des IAs</div>
         <div v-for="(Ia) in Ias" v-bind:key="Ia.id">
           <div @click="setIaRightSelected(Ia)" class="m-v">
-            <div v-if="iaRightSelected.id === Ia.id" class="player-selected">
+            <div v-if="iaRightSelected.id === Ia.id" class="player-selected pointer">
               <span v-if="iaRightSelected.id === Ia.id" style="color : red;">{{Ia.comment}}</span>
               <span v-else>{{Ia.comment}}</span>
             </div>
-            <div v-else>
+            <div v-else class="pointer">
               <span>{{Ia.comment}}</span>
             </div>
           </div>
