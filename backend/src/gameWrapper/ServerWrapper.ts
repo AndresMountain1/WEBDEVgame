@@ -1,5 +1,4 @@
 import { ChildProcess, spawn } from "node:child_process";
-import { options } from "../routes/test";
 
 class ServerWrapper{
     SERVER_PATH = "/home/artikex-reborn/Cours/Projet-PWEB/hackagames/game-risky/hg-risky";
