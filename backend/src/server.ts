@@ -3,7 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 
 // ROUTES 
-import testRoute from './routes/test';
+import gameRoute from './routes/game';
 
 const router = express();
 dotenv.config();
@@ -43,7 +43,7 @@ router.use((req, res, next) => {
     next();
 });
 
-router.use('/test', testRoute);
+router.use('/game', gameRoute);
 
 /** Error handling */
 router.use((req, res, next) => {
