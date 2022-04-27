@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import dotenv from 'dotenv';
+import fileUpload from 'express-fileupload';
 
 // ROUTES 
 import gameRoute from './routes/game';
@@ -24,6 +25,9 @@ router.use((req, res, next) => {
 /** Parse the body of the request */
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+router.use(fileUpload({
+    createParentPath: true
+}));
 
 // Create a helloworld route that returns a string
 router.get('/', (req, res) => {

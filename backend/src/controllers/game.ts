@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { UploadedFile } from 'express-fileupload';
 import AIWrapper from '../gameWrapper/AIWrapper';
 import ServerWrapper from '../gameWrapper/ServerWrapper';
 
@@ -56,4 +57,34 @@ const playAiVsAi = (req: Request, res: Response, next: NextFunction) => {
     let ai2 = new AIWrapper(ai2File);
  };
 
-export default { serverHealthCheck, playAiVsAi };
+ const uploadAi = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if(!req.files) {
+            res.status(401).send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let aiFile = req.files.aiFile as UploadedFile;
+            
+            //Use the mv() method to place the file in upload directory (i.e. "uploads")
+            aiFile.mv('./aiFiles/' + aiFile.name);
+
+            //send response
+            res.send({
+                status: true,
+                message: 'File is uploaded',
+                data: {
+                    name: aiFile.name,
+                    mimetype: aiFile.mimetype,
+                    size: aiFile.size
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+ };
+
+export default { serverHealthCheck, playAiVsAi, uploadAi };

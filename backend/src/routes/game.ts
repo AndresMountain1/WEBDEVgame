@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.get('/', controller.serverHealthCheck);
 router.post('/aivsai', controller.playAiVsAi);
+router.post('/uploadAi', controller.uploadAi);
 export = router;
