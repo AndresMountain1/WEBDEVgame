@@ -10,4 +10,5 @@ let User = require("./userdb");
     
     let data = await silence.save();
     console.log(data);
+    
   })
