@@ -46,16 +46,13 @@
       } else if (players[0].score < players[1].score) {
         winner.value = Ias.filter(Ia => Ia.id === iaRightSelected.id)[0];
         loser.value = Ias.filter(Ia => Ia.id === iaLeftSelected.id)[0];
-      }else {
+      } else {
         winner.value = undefined;
         loser.value = undefined;
       }
     }).catch(err => {
       console.log(err);
     });
-
-    winner.value = iaLeftSelected;
-    loser.value = iaRightSelected;
   }
 </script>
 <template>

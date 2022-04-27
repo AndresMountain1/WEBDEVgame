@@ -21,6 +21,11 @@
                 <div class="middle m-h-lg">
                   <router-link class="link" to="/IaVsHuman">HUMAN vs IA</router-link>
                 </div>
+                <div style="align-self: stretch; background-color: white; width : 1px">
+                </div>
+                <div class="middle m-h-lg">
+                  <router-link class="link" to="/DropZoneIa">IA Dropzone</router-link>
+                </div>
               </div>
               <div class="center">
                 <span class="title">
