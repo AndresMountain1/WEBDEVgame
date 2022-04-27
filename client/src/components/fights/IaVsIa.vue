@@ -1,22 +1,24 @@
 <script setup lang="ts">
   import { ref } from 'vue';
+  import axios from 'axios';  
     const Ias : any[] = [
     {
       id : 1, 
-      path : "python/player1.py",
+      path : "simplePlayer.py",
       comment : "Attack IA"
     }, {
       id : 2, 
-      path : "python/player2.py",
+      path : "",
       comment : "Defense IA"
     }, {
       id : 3, 
-      path : "python/player3.py",
+      path : "",
       comment : "Mixte IA"
     }, 
   ];
 
-  const getIasList = () => {};
+  const getIasList = () => {
+  };
 
   let iaLeftSelected = ref(Ias[0]);
   const setIaLeftSelected = (Ia : any) => {
@@ -32,6 +34,26 @@
   let loser : any = ref(undefined);
 
   const fight = (iaLeftSelected : any, iaRightSelected : any) => {
+    axios.post(import.meta.env.VITE_API_URL + 'game/aivsai', {
+      ia1File : iaLeftSelected.path,
+      ia2File : iaRightSelected.path
+    }).then(res => {
+      console.log(res);
+      let players = res.data.players;
+      if(players[0].score > players[1].score) {
+        winner.value = Ias.filter(Ia => Ia.id === iaLeftSelected.id)[0];
+        loser.value = Ias.filter(Ia => Ia.id === iaRightSelected.id)[0];
+      } else if (players[0].score < players[1].score) {
+        winner.value = Ias.filter(Ia => Ia.id === iaRightSelected.id)[0];
+        loser.value = Ias.filter(Ia => Ia.id === iaLeftSelected.id)[0];
+      }else {
+        winner.value = undefined;
+        loser.value = undefined;
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+
     winner.value = iaLeftSelected;
     loser.value = iaRightSelected;
   }
@@ -78,6 +100,9 @@
           <div class="loser">
             {{loser.comment}} {{loser.path}}
           </div>
+        </div>
+        <div v-else>
+          égalité
         </div>
       </div>
       <div class="div4 circled">
