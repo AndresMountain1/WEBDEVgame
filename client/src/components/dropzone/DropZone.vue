@@ -7,7 +7,10 @@
     <div class="parent-list">
       <div class="div1-list">
         <div class="list-header">Upload d'un fichier d'IA :</div>
-        <input type="file">
+        <div style="margin-top : 5px">
+          <input id="fileupload" type="file">
+        </div>
+        <button id="upload-button" type="button" class="main-button">Sauvegarder l'IA</button>
       </div>
     </div>
   </div>
