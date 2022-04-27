@@ -1,25 +1,42 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
   <div>
     <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-      <div class="wrapper">
-        <HelloWorld msg="You did it!" />
+      <div class="page-header">
+        <div class="flex-row justify-content-center">
+          <div class="flex-row justify-content-space-between align-items-center general-width">
+              <div class="center">
+                <span class="title">
+                  HACKAGAME
+                </span>
+              </div>
+              <div class="flex-row">
+                <div class="middle m-h-lg">
+                  <router-link class="link" to="/IaVsIa">IA vs IA</router-link>
+                </div>
+                <div style="align-self: stretch; background-color: white; width : 1px">
+                </div>
+                <div class="middle m-h-lg">
+                  <router-link class="link" to="/IaVsHuman">HUMAN vs IA</router-link>
+                </div>
+              </div>
+              <div class="center">
+                <span class="title">
+                  Username
+                </span>
+              </div>
+          </div>
+        </div>
       </div>
     </header>
-    <main>
-      <TheWelcome />
-    </main>
+    <router-view></router-view>
   </div>
 </template>
 
 <style>
-@import './assets/base.css';
+/* @import './assets/base.css';
 
 #app {
   max-width: 1280px;
@@ -78,5 +95,5 @@ a,
   .logo {
     margin: 0 2rem 0 0;
   }
-}
+} */
 </style>
