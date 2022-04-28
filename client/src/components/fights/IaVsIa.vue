@@ -20,7 +20,9 @@
     }, 
   ];
 
-  let aGameWasLaunched =ref(false);
+  let aGameWasLaunched = ref(false);
+  let multipleGames = ref(false);
+  let gameNumber = ref(1);
   const getIasList = () => {
   };
 
@@ -41,7 +43,8 @@
     aGameWasLaunched.value = true;
     axios.post(import.meta.env.VITE_API_URL + 'game/aivsai', {
       ia1File : iaLeftSelected.path,
-      ia2File : iaRightSelected.path
+      ia2File : iaRightSelected.path,
+      gameNumber : gameNumber
     }).then(res => {
       console.log(res);
       let players = res.data.players;
@@ -93,6 +96,12 @@
             </div>
           </div>
           <button type="button" class="main-button" @click="fight(iaLeftSelected, iaRightSelected)">Fight</button>
+            <div>
+              <input type="checkbox" v-model="multipleGames" style="margin-bottom : 5px;"> Partie multiple
+              <div v-if="multipleGames">
+                  Nombre : <input type="number" style="width : 30px" min="2" max="10" v-model="gameNumber">
+              </div>
+            </div>
         </div>
       </div>
       <div v-if="aGameWasLaunched" class="div3 circled">
