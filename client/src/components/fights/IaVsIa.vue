@@ -23,6 +23,17 @@
   let aGameWasLaunched = ref(false);
   let multipleGames = ref(false);
   let gameNumber = ref(1);
+  const resetGameNumber = (event : any) => {
+    multipleGames.value = !multipleGames.value;
+
+    if(multipleGames.value) {
+      gameNumber.value = 2;
+    }
+    else{
+      gameNumber.value = 1;
+    }
+  }
+
   const getIasList = () => {
   };
 
@@ -38,13 +49,15 @@
 
   let winner : any = ref(undefined);
   let loser : any = ref(undefined);
+  let winnerScore: any = ref(0);
+  let loserScore: any = ref(0);
 
   const fight = (iaLeftSelected : any, iaRightSelected : any) => {
     aGameWasLaunched.value = true;
     axios.post(import.meta.env.VITE_API_URL + 'game/aivsai', {
       ia1File : iaLeftSelected.path,
       ia2File : iaRightSelected.path,
-      gameNumber : gameNumber
+      gameNumber : gameNumber.value
     }).then(res => {
       console.log(res);
       let players = res.data.players;
@@ -53,9 +66,13 @@
       if(players[0].score > players[1].score) {
         winner.value = Ias.filter(Ia => Ia.id === iaLeftSelected.id)[0];
         loser.value = Ias.filter(Ia => Ia.id === iaRightSelected.id)[0];
+        winnerScore.value = players[0].score;
+        loserScore.value = players[1].score;
       } else if (players[0].score < players[1].score) {
         winner.value = Ias.filter(Ia => Ia.id === iaRightSelected.id)[0];
         loser.value = Ias.filter(Ia => Ia.id === iaLeftSelected.id)[0];
+        winnerScore.value = players[1].score;
+        loserScore.value = players[0].score;
       } else {
         winner.value = undefined;
         loser.value = undefined;
@@ -97,7 +114,7 @@
           </div>
           <button type="button" class="main-button" @click="fight(iaLeftSelected, iaRightSelected)">Fight</button>
             <div>
-              <input type="checkbox" v-model="multipleGames" style="margin-bottom : 5px;"> Partie multiple
+              <input type="checkbox" style="margin-bottom : 5px;" @change="resetGameNumber"> Partie multiple
               <div v-if="multipleGames">
                   Nombre : <input type="number" style="width : 30px" min="2" max="10" v-model="gameNumber">
               </div>
@@ -119,7 +136,7 @@
                     {{winner.path}}
                   </div>
                   <div>
-                    {{winner.score}}
+                    {{winnerScore}}
                   </div>
                 </div>
               </div>
@@ -138,7 +155,7 @@
                     {{loser.path}}
                   </div>
                   <div>
-                    {{loser.score}}
+                    {{loserScore}}
                   </div>
                 </div>
               </div>
