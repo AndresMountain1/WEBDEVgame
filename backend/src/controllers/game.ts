@@ -15,46 +15,58 @@ const playAiVsAi = (req: Request, res: Response, next: NextFunction) => {
     let ai1File = req.body.ai1File ? req.body.ai1File : 'simplePlayer.py';
     let ai2File = req.body.ai2File ? req.body.ai2File : 'simplePlayer.py';
 
-    let serverWrapper = new ServerWrapper(gameNumber);
+    try {
+        let serverWrapper = new ServerWrapper(gameNumber);
     
-    serverWrapper.launchServer((data: string) => {
-
-        const searchRegExp = /\n/g;
-        const replaceWith = ' ';
-        const sanitized = data.replace(searchRegExp, replaceWith);
-
-        let playersRegex = [/([0-9]{1}) \(socket: ([0-9]{1}).+\) /g, /.+New player-([1-9]{1}) \(socket: ([0-9]{1}).+\) /g]
-        let players = [];
-
-        // Get the player ids and sockets from the data
-        for (let index = 0; index < 2; index++) {
-            const regex = playersRegex[index];
-            const match = regex.exec(sanitized);
-            if(!match) throw new Error("No player could be extracted from data");
+        serverWrapper.launchServer((data: string) => {
+            
+            //console.log(data);
+            const searchRegExp = /\n/g;
+            const replaceWith = ' ';
+            const sanitized = data.replace(searchRegExp, replaceWith);
     
-            let player = { id: parseInt(match[1]), socket: parseInt(match[2]), score: 0 };
-            players.push(player);
-        }
-
-        // Get the game result from the data
-        const scoreRegex = /.+\: score: ([0-9]{1})\(([0-9]{1,3}).+, ([0-9]{1})\(([0-9]{1,3})/g;
-        const scoreMatch = scoreRegex.exec(sanitized);
-        if(!scoreMatch) throw new Error("No score found in data");
+            let playersRegex = [/([0-9]{1}) \(socket: ([0-9]{1}).+\) /g, /.+New player-([1-9]{1}) \(socket: ([0-9]{1}).+\) /g]
+            let players: any[] = [];
+    
+            // Get the player ids and sockets from the data
+            for (let index = 0; index < 2; index++) {
+                const regex = playersRegex[index];
+                const match = regex.exec(sanitized);
+                if(!match) throw new Error("No player could be extracted from data");
         
-        players.forEach(player => {
-            if(player.socket === parseInt(scoreMatch[1])) {
-                player.score = parseInt(scoreMatch[2]);
+                let player = { id: parseInt(match[1]), socket: parseInt(match[2]), score: 0 };
+                players.push(player);
             }
-            if(player.socket === parseInt(scoreMatch[3])) {
-                player.score = parseInt(scoreMatch[4]);
-            }
-        });    
+    
+            const scoreRegex = /score: ([0-9]{1})\(([0-9]{1,3}).+, ([0-9]{1})\(([0-9]{1,3})/g;
 
-        return res.status(200).json({players});
-    });
+            data.split("\n").forEach(line => {
+                const scoreMatch = scoreRegex.exec(line);
+                players.forEach(player => {
+                    if(scoreMatch == null) return;
 
-    let ai1 = new AIWrapper(ai1File);
-    let ai2 = new AIWrapper(ai2File);
+                    if(player.socket === parseInt(scoreMatch[1])) {
+                        player.score += parseInt(scoreMatch[2]);
+                    }
+                    if(player.socket === parseInt(scoreMatch[3])) {
+                        player.score += parseInt(scoreMatch[4]);
+                    }
+                });    
+            });
+    
+            return res.status(200).json({players});
+        });
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
+
+    try {
+        let ai1 = new AIWrapper(ai1File);
+        let ai2 = new AIWrapper(ai2File);
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
+
  };
 
  const uploadAi = (req: Request, res: Response, next: NextFunction) => {
