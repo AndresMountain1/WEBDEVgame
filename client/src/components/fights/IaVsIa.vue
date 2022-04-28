@@ -5,18 +5,22 @@
     {
       id : 1, 
       path : "simplePlayer.py",
-      comment : "Attack IA"
+      comment : "Attack IA",
+      score : 0
     }, {
       id : 2, 
-      path : "",
-      comment : "Defense IA"
+      path : "simplePlayer.py",
+      comment : "Defense IA",
+      score : 0
     }, {
       id : 3, 
-      path : "",
-      comment : "Mixte IA"
+      path : "simplePlayer.py",
+      comment : "Mixte IA",
+      score : 0
     }, 
   ];
 
+  let aGameWasLaunched =ref(false);
   const getIasList = () => {
   };
 
@@ -34,12 +38,15 @@
   let loser : any = ref(undefined);
 
   const fight = (iaLeftSelected : any, iaRightSelected : any) => {
+    aGameWasLaunched.value = true;
     axios.post(import.meta.env.VITE_API_URL + 'game/aivsai', {
       ia1File : iaLeftSelected.path,
       ia2File : iaRightSelected.path
     }).then(res => {
       console.log(res);
       let players = res.data.players;
+      iaLeftSelected.score = players[0].score;
+      iaRightSelected.score = players[1].score;
       if(players[0].score > players[1].score) {
         winner.value = Ias.filter(Ia => Ia.id === iaLeftSelected.id)[0];
         loser.value = Ias.filter(Ia => Ia.id === iaRightSelected.id)[0];
@@ -88,18 +95,60 @@
           <button type="button" class="main-button" @click="fight(iaLeftSelected, iaRightSelected)">Fight</button>
         </div>
       </div>
-      <div class="div3 circled">
+      <div v-if="aGameWasLaunched" class="div3 circled">
         <div class="list-header">Recap</div>
         <div v-if="winner" class="flex-row-horizontal">
           <div class="winner">
-            {{winner.comment}} {{winner.path}}
+            <div class="flex-row justify-content-space-between">
+              <img src="../../assets/ressources/cup_47753.png">
+              <div class="middle">
+                <div class="flex-row-horizontal">
+                  <div style="font-weight : bold">
+                    {{winner.comment}}
+                  </div>
+                  <div>
+                    {{winner.path}}
+                  </div>
+                  <div>
+                    {{winner.score}}
+                  </div>
+                </div>
+              </div>
+              <img src="../../assets/ressources/cup_47753.png">
+            </div>
           </div>
           <div class="loser">
-            {{loser.comment}} {{loser.path}}
+            <div class="flex-row justify-content-space-between">
+              <img src="../../assets/ressources/skull-on-top-of-a-cross-of-bones-in-a-rounded-square_icon-icons.com_70385.png">
+              <div class="middle">
+                <div class="flex-row-horizontal">
+                  <div style="font-weight : bold">
+                    {{loser.comment}}
+                  </div>
+                  <div>
+                    {{loser.path}}
+                  </div>
+                  <div>
+                    {{loser.score}}
+                  </div>
+                </div>
+              </div>
+              <img src="../../assets/ressources/skull-on-top-of-a-cross-of-bones-in-a-rounded-square_icon-icons.com_70385.png">
+            </div>
           </div>
         </div>
         <div v-else>
-          égalité
+          <div class="draw">
+            <div class="flex-row justify-content-space-between">
+              <img src="../../assets/ressources/equal_112383.png">
+              <div class="middle">
+                <span style="font-weight : bold">
+                  Egalité
+                </span>
+              </div>
+              <img src="../../assets/ressources/equal_112383.png">
+            </div>
+          </div>
         </div>
       </div>
       <div class="div4 circled">
@@ -121,6 +170,9 @@
 </template>
 
 <style scoped>
+img {
+  margin: 5px;
+}
 .parent {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

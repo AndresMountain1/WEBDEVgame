@@ -1,4 +1,41 @@
 <script setup lang="ts">
+  import { ref } from "@vue/reactivity";
+  import router from './router/router';
+
+
+  let login = ref('');
+  let password = ref('');
+  let userName = ref('');
+
+  let users : any[] = [{
+    id : 1,
+    login : 'tsalon',
+    password : 'demo'
+  }, {
+    id : 2,
+    login : 'tfourniez',
+    password : 'demo'
+  }];
+
+  let userIsLoggedIn : any = ref(false);
+
+  router.beforeEach(async (to, from) => {
+    if (!userIsLoggedIn) {
+      router.push('/IaVsIa/1');
+    }
+  });
+
+  const logInApp = (login : string, password : string) => {
+    let user = users.find((user: { login: string; password: string; }) => user.login === login && user.password === password);
+    if(user) {
+      userIsLoggedIn.value = true;
+      userName.value = user.login;
+      router.push('/IaVsIa');
+
+    } else {
+      userIsLoggedIn.value = "Erreur. Mauvais login ou mot de passe ..."
+    }
+  }
 </script>
 
 <template>
@@ -12,7 +49,7 @@
                   HACKAGAME
                 </span>
               </div>
-              <div class="flex-row">
+              <div v-if="userIsLoggedIn === true" class="flex-row">
                 <div class="middle m-h-lg">
                   <router-link class="link" to="/IaVsIa">IA vs IA</router-link>
                 </div>
@@ -27,78 +64,60 @@
                   <router-link class="link" to="/DropZoneIa">IA Dropzone</router-link>
                 </div>
               </div>
-              <div class="center">
+              <div v-if="userIsLoggedIn === true" class="center">
                 <span class="title">
-                  Username
+                  {{userName}}
                 </span>
               </div>
           </div>
         </div>
       </div>
     </header>
+    <div v-if="userIsLoggedIn !== true" class="item">
+      <div class="middle" style="margin-top: 10%;">
+        <div class="flex-row-vertical justify-content-center">
+          <div class="parent-list" style="width : 320px">
+            <div class="div1-list">
+              <div class="list-header">Connexion</div>
+              <div style="margin-top : 5px">
+                <div class="form-label">
+                  <div class="form-label">Identifiant :</div>
+                  <input v-model="login" placeholder="Identifiant" class="form-input">
+                </div>
+                <div>
+                  <div class="form-label">Mot de passe :</div>
+                  <input v-model="password" type="password" placeholder = "Mot de Passe" class="form-input">
+                </div>
+              </div>
+              <button type="button" class="main-button" @click="logInApp(login, password)">Se connecter</button>
+            </div>
+          </div>
+          <span v-if="userIsLoggedIn === 'Erreur. Mauvais login ou mot de passe ...'">{{userIsLoggedIn}}</span>
+        </div>
+      </div>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
 <style>
-/* @import './assets/base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
-
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
+  .parent-list {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    width: inherit;
+    text-align: center;
+  }
+  .div1-list { 
+    grid-area: 1 / 1 / 2 / 2; 
+    border: solid #1E3D59;
+    height: auto;
+  }
+  .form-label {
+    margin-top: 2px;
+    margin-bottom: 2px;
   }
 
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-} */
 </style>
